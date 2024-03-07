@@ -6,16 +6,31 @@ class ProductManager {
   }
 
   async addProduct(product) {
-    const { title, description, price, thumbnail, code, stock } = product;
+    const {
+      title,
+      description,
+      price,
+      thumbnail,
+      code,
+      stock,
+      category,
+      status,
+    } = product;
     // VALIDACIONES:
     // Comprobamos que ningun dato este vacio
-    if (!title || !description || !price || !thumbnail || !code || !stock) {
+    if (
+      !title ||
+      !description ||
+      !price ||
+      !thumbnail ||
+      !code ||
+      !stock ||
+      !category
+    ) {
       console.error("Todos los campos son obligatorios.");
       return;
     }
 
-    /* Como se me sugirio en la primer pre-entrega validamos que el stock 
-    sea un numero positivo */
     if (!typeof stock === "number" || stock <= 0) {
       console.error("El stock debe ser un numero positivo mayor que cero.");
       return;
@@ -39,7 +54,9 @@ class ProductManager {
     const newId =
       products.length > 0 ? Math.max(...products.map((p) => p.id)) + 1 : 1;
 
-    const newProduct = { ...product, id: newId };
+    const statusValidate = typeof status === "boolean" ? status : true;
+
+    const newProduct = { ...product, id: newId, status: statusValidate };
 
     // Pusheamos al array para luego sobreescribir el archivo
     products.push(newProduct);
@@ -67,11 +84,19 @@ class ProductManager {
   }
 
   async updateProduct(id, updatedProduct) {
-    const { title, description, price, thumbnail, code, stock } =
+    const { title, description, price, thumbnail, code, stock, category } =
       updatedProduct;
     // VALIDACIONES:
     // Comprobamos que ningun dato este vacio
-    if (!title || !description || !price || !thumbnail || !code || !stock) {
+    if (
+      !title ||
+      !description ||
+      !price ||
+      !thumbnail ||
+      !code ||
+      !stock ||
+      !category
+    ) {
       console.error("Todos los campos son obligatorios.");
       return;
     }
@@ -116,64 +141,3 @@ class ProductManager {
 }
 
 module.exports = ProductManager;
-
-//  DESAFÍO ENTREGABLE 2 - PROCESO DE TESTING
-// const main = async () => {
-//   try {
-//     const productManager = new ProductManager();
-
-//     // PASO 1: Resultado []
-
-//     console.log(await productManager.getProducts());
-
-//     // PASO 2: Se agrega un producto.
-
-//     await productManager.addProduct({
-//       title: "producto prueba",
-//       description: "Este es un producto prueba",
-//       price: 200,
-//       thumbnail: "Sin imagen",
-//       code: "abc123",
-//       stock: 25,
-//     });
-
-//     // PASO 3: Resultado producto cargado
-
-//     console.log(await productManager.getProducts());
-
-//     // PASO 4: Se espera error dado que ya se encuentra cargado.
-//     await productManager.addProduct({
-//       title: "producto prueba",
-//       description: "Este es un producto prueba",
-//       price: 200,
-//       thumbnail: "Sin imagen",
-//       code: "abc123",
-//       stock: 25,
-//     });
-
-//     // PASO 5: Busqueda por Id con ambas opciones de resultados.
-//     console.log(await productManager.getProductById(1));
-//     console.log(await productManager.getProductById(4)); // No debería encontrarlo
-
-//     // PASO 6: Modificación de producto.
-//     console.log(
-//       await productManager.updateProduct(1, {
-//         title: "producto prueba MODIFICADO",
-//         description: "Este es un producto prueba MODIFICADO",
-//         price: 200,
-//         thumbnail: "Sin imagen",
-//         code: "abc123",
-//         stock: 25,
-//       })
-//     );
-
-//     // PASO 7: Eliminar producto simulación ambos casos
-//     console.log(await productManager.deleteProduct(1));
-//     console.log(await productManager.deleteProduct(50)); // No debería encontrarlo
-//   } catch (error) {
-//     console.log(`Hubo un error: ${error}`);
-//   }
-// };
-
-// Ejecutamos 
-// main();
