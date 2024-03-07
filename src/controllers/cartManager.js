@@ -1,8 +1,10 @@
 const fs = require("fs").promises;
+const ProductManager = require('./productManager'); // Asegúrate de ajustar la ruta al archivo ProductManager.js
 
 class CartManager {
   constructor(path) {
     this.path = path;
+    this.productManager = new ProductManager(`${__dirname}/../../data/products.json`);
   }
   // Creamos el carro de compras
   async createCart() {
@@ -32,6 +34,11 @@ class CartManager {
     const cart = carts.find((c) => c.id === cartId);
     if (!cart) {
       throw new Error("Carrito no encontrado");
+    }
+
+    const product = await this.productManager.getProductById(productId);
+    if (!product || product === "Producto no encontrado") {
+      throw new Error("Producto no encontrado");
     }
 
     const productIndex = cart.products.findIndex(
