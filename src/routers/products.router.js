@@ -25,6 +25,13 @@ router.get("/", async (req, res) => {
 // Obtener un producto por su ID
 router.get("/:pid", async (req, res) => {
   try {
+    if (req.params.pid) {
+      if (isNaN(req.params.pid) || req.params.pid <= 0) {
+        return res
+          .status(400)
+          .json({ error: "El ID ingresado es incorrecto." });
+      }
+    }
     const product = await productManager.getProductById(
       parseInt(req.params.pid)
     );
@@ -42,8 +49,10 @@ router.get("/:pid", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const product = await productManager.addProduct(req.body);
-    if (product) res.status(201).json(product);
-    else res.status(400).send("Error en los datos del producto");
+    if (product) {
+      await req.app.get("ws").emit("newProduct", product);
+      res.status(201).json(product);
+    } else res.status(400).send("Error en los datos del producto");
   } catch (error) {
     res.status(500).json({ error: "Hubo un error al obtener el producto." });
   }
@@ -69,6 +78,7 @@ router.delete("/:pid", async (req, res) => {
     const message = await productManager.deleteProduct(
       parseInt(req.params.pid)
     );
+    await req.app.get("ws").emit("removeProduct", req.params.pid);
     res.send(message);
   } catch (error) {
     res.status(500).json({ error: "Hubo un error al obtener el producto." });

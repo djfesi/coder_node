@@ -1,112 +1,112 @@
 [
   {
-    "title": "producto 1",
-    "description": "Este es un producto prueba",
-    "price": 150,
-    "thumbnail": "Sin imagen",
+    "title": "BOTAS WMNS AIR JORDAN 1 MID NIKE",
+    "description": "El calzado Air Jordan 1 Mid aporta estilo en toda la cancha y comodidad premium a un look icónico. La unidad Air-Sole amortigua el partido en las canchas, y el cuello acolchado ofrece una mayor sujeción.",
+    "price": 180000,
+    "thumbnail": "https://www.digitalsport.com.ar/files/products/658d1b94f29d3-603102-500x500.jpg",
     "code": "A-0001",
     "stock": 1,
     "id": 1,
     "status": true,
-    "category": "Almacen"
+    "category": "Calzado"
   },
   {
-    "title": "producto 2",
-    "description": "Este es un producto prueba",
-    "price": 150,
-    "thumbnail": "Sin imagen",
+    "title": "BOTAS AIR JORDAN 1 RETRO HI PALOMINO NIKE",
+    "description": "Sofisticada y audaz, esta versión lujosa del AJ1 tiene una gracia de alta moda con estilo equino. El cuero premium se combina con el estilo de pelaje pardo para que tu atuendo sea espectacular como el juego de MJ. ¿Y el destello de color en la lengüeta? Es el detalle perfecto.",
+    "price": 230000,
+    "thumbnail": "https://www.digitalsport.com.ar/files/products/65b83b5e79494-607796-500x500.jpg",
     "code": "A-0002",
     "stock": 15,
     "id": 2,
     "status": true,
-    "category": "Almacen"
+    "category": "Calzado"
   },
   {
-    "title": "producto 3",
-    "description": "Este es un producto prueba",
-    "price": 300,
-    "thumbnail": "Sin imagen",
+    "title": "ZAPATILLAS AIR FORCE 1 07 LX NIKE",
+    "description": "Piel abatanada. Lona premium. Colores fáciles de combinar. Este modelo AF1 ofrece un estilo discreto y agrega el toque perfecto a tu look. Con una confección inspirada en la época de los 80, conservamos todo lo que te gusta de este calzado básico de estilo moderno.",
+    "price": 270000,
+    "thumbnail": "https://www.digitalsport.com.ar/files/products/65b0f77ae7aa1-601548-500x500.jpg",
     "code": "A-0003",
     "stock": 5,
     "id": 3,
     "status": true,
-    "category": "Almacen"
+    "category": "Calzado"
   },
   {
-    "title": "producto 4",
-    "description": "Este es un producto prueba",
-    "price": 100,
-    "thumbnail": "Sin imagen",
+    "title": "BOTAS AIR JORDAN 1 RETRO NIKE",
+    "description": "Las Air Jordan 1 Retro High rehacen el calzado clásico y te brindan una apariencia nueva con una sensación familiar. Los materiales de primera calidad con nuevos colores y texturas dan una expresión moderna a un favorito de todos los tiempos.",
+    "price": 290000,
+    "thumbnail": "https://www.digitalsport.com.ar/files/products/656831720b152-601533-500x500.jpg",
     "code": "A-0004",
     "stock": 2,
     "id": 4,
     "status": true,
-    "category": "Almacen"
+    "category": "Calzado"
   },
   {
-    "title": "producto 5",
-    "description": "Este es un producto prueba",
-    "price": 200,
-    "thumbnail": "Sin imagen",
+    "title": "ZAPATILLAS AIR FORCE 1SP BILLIE EILISH NIKE",
+    "description": "Como sabemos que cada acción cuenta, hemos colaborado de nuevo con Billie para elaborar un Air Force 1 que celebra los nuevos comienzos. Hemos utilizado materiales sobrantes y residuos de la fabricación de sus AF1 High anteriores en la parte superior de este AF1 Low. Además, hemos agregado materiales sustentables, como Nike Grind en la suela y restos de espuma en la plantilla. El diseño es un equilibrio entre una perspectiva innovadora y contemporánea y el respeto más profundo por los clásicos.",
+    "price": 270000,
+    "thumbnail": "https://www.digitalsport.com.ar/files/products/65b83b08b9dd6-647388-500x500.jpg",
     "code": "A-0005",
     "stock": 25,
     "id": 5,
     "status": true,
-    "category": "Almacen"
+    "category": "Calzado"
   },
   {
-    "title": "producto 6",
-    "description": "Este es un producto prueba",
-    "price": 80,
-    "thumbnail": "Sin imagen",
+    "title": "ZAPATILLAS AIR TRAINER 1 RMX NIKE",
+    "description": "¿Adónde llevarás a tus entrenadores? ¿En cualquier lugar y en todas partes? Al igual que los originales del 87, estos zapatos esenciales te permiten cruzar entre la zona alta y el centro sin ningún problema. Con detalles retro que te encantan, como la correa del antepié, además de logotipos divididos que rinden homenaje al pasado y al presente de Nike, mantienen viva y coleando la leyenda. Entonces, nuevamente, ¿adónde llevarás a tus Entrenadores? En cualquier lugar y en todas partes, de hecho.",
+    "price": 240000,
+    "thumbnail": "https://www.digitalsport.com.ar/files/products/65c23a98d68cf-609208-500x500.jpg",
     "code": "A-0006",
     "stock": 6,
     "id": 6,
     "status": true,
-    "category": "Almacen"
+    "category": "Calzado"
   },
   {
-    "title": "producto 7",
-    "description": "Este es un producto prueba",
-    "price": 99,
-    "thumbnail": "Sin imagen",
+    "title": "BOTAS AIR JORDAN 1 ZM AIR NIKE",
+    "description": "La gamuza premium y la espuma Formula 23 exclusiva de la marca Jordan se unen para brindarte un AJ1 mucho más lujoso (y cómodo). Con este calzado no necesitas elegir entre estilo o comodidad, lo cual está bien porque te mereces las dos cosas.",
+    "price": 190000,
+    "thumbnail": "https://www.digitalsport.com.ar/files/products/6557d3ffb824f-609129-500x500.jpg",
     "code": "A-0007",
     "stock": 5,
     "id": 7,
     "status": true,
-    "category": "Almacen"
+    "category": "Calzado"
   },
   {
-    "title": "producto 8",
-    "description": "Este es un producto prueba",
-    "price": 300,
-    "thumbnail": "Sin imagen",
+    "title": "BOTAS AIR JORDAN 1 RETRO NIKE",
+    "description": "La gamuza suave en tonos discretos crea un efecto más sofisticado para tus looks más deslumbrantes. Seguro te encantará probarlo. Creemos que te gustará usar un par de Jordan. Quizá puedas llevarlo a la inauguración de alguna galería con tus amigos o a una noche de pizza con tu grupo. Vayas donde vayas, este diseño te acompaña en cada paso.",
+    "price": 250000,
+    "thumbnail": "https://www.digitalsport.com.ar/files/products/656921344f02f-601523-500x500.jpg",
     "code": "A-0008",
     "stock": 3,
     "id": 8,
     "status": true,
-    "category": "Almacen"
+    "category": "Calzado"
   },
   {
-    "title": "producto 9",
-    "description": "Este es un producto prueba",
-    "price": 90,
-    "thumbnail": "Sin imagen",
+    "title": "BOTAS AIR JORDAN 23 1 ZM AIR NIKE",
+    "description": "La gamuza premium y la espuma Formula 23 exclusiva de la marca Jordan se unen para brindarte un AJ1 mucho más lujoso (y cómodo). Con este calzado no necesitas elegir entre estilo o comodidad, lo cual está bien porque te mereces las dos cosas.",
+    "price": 190000,
+    "thumbnail": "https://www.digitalsport.com.ar/files/products/65b83b23f1657-609134-500x500.jpg",
     "code": "A-0009",
     "stock": 2,
     "id": 9,
     "status": true,
-    "category": "Almacen"
+    "category": "Calzado"
   },
   {
-    "title": "producto 10",
-    "description": "Este es un producto prueba",
-    "price": 120,
-    "thumbnail": "Sin imagen",
+    "title": "BOTAS AIR JORDAN 1 ZM AIR NIKE",
+    "description": "La gamuza premium y la espuma Formula 23 exclusiva de la marca Jordan se unen para brindarte un AJ1 mucho más lujoso (y cómodo). Con este calzado no necesitas elegir entre estilo o comodidad, lo cual está bien porque te mereces las dos cosas.",
+    "price": 190000,
+    "thumbnail": "https://www.digitalsport.com.ar/files/products/6557d40610ac5-603087-500x500.jpg",
     "code": "A-0010",
     "stock": 30,
     "id": 10,
     "status": true,
-    "category": "Almacen"
+    "category": "Calzado"
   }
 ]

@@ -1,0 +1,104 @@
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-lg-3">
+      <h2>Add Product</h2>
+      <form action="./api/products" method="post" id="addProductForm">
+        <div class="form-group">
+          <label for="title">Title</label>
+          <input
+            type="text"
+            class="form-control"
+            id="title"
+            name="title"
+            placeholder="Enter title"
+          />
+        </div>
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea
+            class="form-control"
+            id="description"
+            name="description"
+            rows="3"
+            placeholder="Enter description"
+          ></textarea>
+        </div>
+        <div class="form-group">
+          <label for="price">Price</label>
+          <input
+            type="number"
+            class="form-control"
+            id="price"
+            name="price"
+            placeholder="Enter price"
+          />
+        </div>
+        <div class="form-group">
+          <label for="thumbnail">Thumbnail URL</label>
+          <input
+            type="text"
+            class="form-control"
+            id="thumbnail"
+            name="thumbnail"
+            placeholder="Enter thumbnail URL"
+          />
+        </div>
+        <div class="form-group">
+          <label for="code">Code</label>
+          <input
+            type="text"
+            class="form-control"
+            id="code"
+            name="code"
+            placeholder="Enter code"
+          />
+        </div>
+        <div class="form-group">
+          <label for="stock">Stock</label>
+          <input
+            type="number"
+            class="form-control"
+            id="stock"
+            name="stock"
+            placeholder="Enter stock"
+          />
+        </div>
+        <div class="form-group">
+          <label for="category">Category</label>
+          <input
+            type="text"
+            class="form-control"
+            id="category"
+            name="category"
+            placeholder="Enter category"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+
+    <div class="col-lg-9">
+      <div class="container mt-4">
+        <div class="row" id="row-products-live">
+          {{#each products}}
+            <div class="col-md-4 mb-4">
+              <div class="card">
+                <img
+                  src="{{thumbnail}}"
+                  class="card-img-top"
+                  alt="Product Thumbnail"
+                />
+                <div class="card-body">
+                  <h5 class="card-title">{{title}}</h5>
+                  <p class="card-text">{{description}}</p>
+                  <p class="card-text">Price: ${{price}}</p>
+                </div>
+                  <button class="btn btn-danger btn-delete-product" data-product-id="{{id}}">Delete</button>
+              </div>
+            </div>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
