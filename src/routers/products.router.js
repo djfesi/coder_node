@@ -11,6 +11,7 @@ router.get("/", async (req, res) => {
     let limit = parseInt(req.query.limit);
     limit = !isNaN(limit) && limit > 0 ? limit : 10;
     let products = await productManagerDB.getProducts({}, limit);
+    products = products.map(prod => prod.toObject());
     res.json(products);
   } catch (error) {
     res.status(500).json({ error: "Hubo un error al obtener los productos." });
