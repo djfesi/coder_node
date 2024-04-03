@@ -26,4 +26,12 @@ router.get("/realtimeproducts", async (_, res) => {
   });
 });
 
+router.get("/chat", async (_, res) => {
+  res.render("chat", {
+    title: "Chat",
+    useWS: true,
+    scripts: ["chat.js"],
+  });
+});
+
 module.exports = router;

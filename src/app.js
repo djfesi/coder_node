@@ -2,10 +2,10 @@ const express = require("express");
 const handlebars = require("express-handlebars");
 const { Server } = require("socket.io");
 const mongoose = require("mongoose");
-
 const productRouter = require("./routers/products.router");
 const cartRouter = require("./routers/carts.router");
 const viewsRouter = require("./routers/views.router");
+const messagesModel = require("./dao/models/messages.model");
 const app = express();
 
 // HBS
@@ -36,8 +36,27 @@ const connectToDatabase = async () => {
     const wsServer = new Server(httpServer);
     app.set("ws", wsServer);
 
-    wsServer.on("connection", (client) => {
-      // console.log(client.id);
+    wsServer.on("connection", async (clientSocket) => {
+      const messages = await messagesModel
+        .find({})
+        .sort({ createdAt: 1 })
+        .exec();
+      messages.forEach((message) => {
+        clientSocket.emit("message", message);
+      });
+
+      clientSocket.on("message", async (data) => {
+        const newMessage = new messagesModel({
+          user: data.user,
+          message: data.message,
+        });
+        const savedMessage = await newMessage.save();
+        wsServer.emit("message", savedMessage);
+      });
+
+      clientSocket.on("user-connected", (user) => {
+        clientSocket.broadcast.emit("user-joined", user);
+      });
     });
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);
