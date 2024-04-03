@@ -41,7 +41,7 @@ class ProductManager {
 
     // Validacion para chequear la existencia del mismo
     const replicatedProduct = await this.getProducts({ code });
-    if (replicatedProduct) {
+    if (replicatedProduct.length) {
       console.error("El código del producto ya existe.");
       return;
     }

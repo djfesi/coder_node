@@ -22,7 +22,7 @@ socket.on("newProduct", (product) => {
       <p class="card-text">${product.description}</p>
       <p class="card-text">Price: ${product.price}</p>
     </div>
-    <button class="btn btn-danger btn-delete-product" data-product-id="${product.id}">Delete</button>
+    <button class="btn btn-danger btn-delete-product" data-product-id="${product._id}">Delete</button>
   </div>
 </div>`;
 });
