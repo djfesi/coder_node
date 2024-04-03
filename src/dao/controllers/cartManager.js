@@ -1,5 +1,5 @@
 const fs = require("fs").promises;
-const ProductManager = require('./productManager'); // Asegúrate de ajustar la ruta al archivo ProductManager.js
+const ProductManager = require('./productManager');
 
 class CartManager {
   constructor(path) {

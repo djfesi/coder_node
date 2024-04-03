@@ -1,13 +1,13 @@
 const express = require("express");
-const CartManager = require("../dao/controllers/cartManager");
+const CartManagerDB = require("../dao/dbManager/cartManager");
+
 const router = express.Router();
-const path = `${__dirname}/../../data/carts.json`;
-const cartManager = new CartManager(path);
+const cartManagerDB = new CartManagerDB();
 
 // Crear carrito de compras
 router.post("/", async (_, res) => {
     try {
-        const cartId = await cartManager.createCart();
+        const cartId = await cartManagerDB.createCart();
         res.status(201).json({ id: cartId });
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -17,7 +17,7 @@ router.post("/", async (_, res) => {
 // Agregar un producto al carrito
 router.post("/:cid/products/:pid", async (req, res) => {
   try {
-      await cartManager.addProductToCart(parseInt(req.params.cid), parseInt(req.params.pid));
+      await cartManagerDB.addProductToCart(req.params.cid, req.params.pid);
       res.status(200).json({ message: "Producto agregado al carrito" });
   } catch (error) {
       res.status(500).json({ error: error.message });
@@ -28,7 +28,7 @@ router.post("/:cid/products/:pid", async (req, res) => {
 // Obtener productos de un carrito de compras por ID
 router.get("/:cid", async (req, res) => {
     try {
-        const cartProducts = await cartManager.getCartProducts(parseInt(req.params.cid));
+        const cartProducts = await cartManagerDB.getCartProducts(req.params.cid);
         if (cartProducts) {
             res.json(cartProducts);
         } else {

@@ -1,48 +1,37 @@
-const fs = require("fs").promises;
-const ProductManager = require('./productManager'); // Asegúrate de ajustar la ruta al archivo ProductManager.js
+const Cart = require("./../models/cart.model");
+const ProductManager = require("./productManager");
 
 class CartManager {
-  constructor(path) {
-    this.path = path;
-    this.productManager = new ProductManager(`${__dirname}/../../../data/products.json`);
+  constructor() {
+    this.productManager = new ProductManager();
   }
+
   // Creamos el carro de compras
   async createCart() {
-    const carts = await this._getCarts();
-    const newCart = {
-      id: carts.length > 0 ? Math.max(...carts.map((c) => c.id)) + 1 : 1,
-      products: [],
-    };
-    carts.push(newCart);
-    await fs.writeFile(this.path, JSON.stringify(carts, null, 2));
-    return newCart.id;
+    const newCart = new Cart({ products: [] });
+    await newCart.save();
+    return newCart._id;
   }
 
-  // Traemos los productos del carro, algo que no especificaba
-  // la consigna si devolviamos el ID de los prod o hacemos un get 
-  // del producto por ID para mostrarlo
-
+  // Buscamos el Cart por su Id y devolvemos los productos
   async getCartProducts(cartId) {
-    const carts = await this._getCarts();
-    const cart = carts.find((cart) => cart.id === cartId);
-    return cart ? cart.products : null;
+    const carts = await Cart.findById(cartId);
+    return carts ? carts.products : null;
   }
 
   // Agregamos productos al carro indicado por ID
   async addProductToCart(cartId, productId) {
-    const carts = await this._getCarts();
-    const cart = carts.find((c) => c.id === cartId);
+    const cart = await Cart.findById(cartId);
     if (!cart) {
       throw new Error("Carrito no encontrado");
     }
-
-    const product = await this.productManager.getProductById(productId);
-    if (!product || product === "Producto no encontrado") {
+    const findProduct = await this.productManager.getProductById(productId);
+    if (!findProduct) {
       throw new Error("Producto no encontrado");
     }
 
     const productIndex = cart.products.findIndex(
-      (p) => p.product === productId
+      (p) => p.product.toString() === productId.toString()
     );
     if (productIndex !== -1) {
       cart.products[productIndex].quantity += 1;
@@ -50,17 +39,7 @@ class CartManager {
       cart.products.push({ product: productId, quantity: 1 });
     }
 
-    await fs.writeFile(this.path, JSON.stringify(carts, null, 2));
-  }
-
-  // Get privado de carros cargados
-  async _getCarts() {
-    try {
-      const data = await fs.readFile(this.path, "utf8");
-      return JSON.parse(data);
-    } catch (error) {
-      throw error;
-    }
+    await cart.save();
   }
 }
 
