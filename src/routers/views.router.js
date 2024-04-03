@@ -28,7 +28,7 @@ router.get("/realtimeproducts", async (_, res) => {
 
 router.get("/chat", async (_, res) => {
   res.render("chat", {
-    title: "Chat",
+    title: "Messages",
     useWS: true,
     scripts: ["chat.js"],
   });
