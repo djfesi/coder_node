@@ -1,21 +1,16 @@
 const express = require("express");
-const ProductManager = require("../controllers/productManager");
+const ProductManagerDB = require("../dao/dbManager/productManager");
+const { default: mongoose } = require("mongoose");
+
 const router = express.Router();
-const path = `${__dirname}/../../data/products.json`;
 
-const productManager = new ProductManager(path);
-
+const productManagerDB = new ProductManagerDB();
 // Obtener los productos
 router.get("/", async (req, res) => {
   try {
-    const limit = req.query.limit;
-    let products = await productManager.getProducts();
-    if (limit) {
-      if (isNaN(limit) || limit <= 0) {
-        res.status(400).json({ error: "El limite establecido es incorrecto." });
-      }
-      products = products.slice(0, parseInt(limit));
-    }
+    let limit = parseInt(req.query.limit);
+    limit = !isNaN(limit) && limit > 0 ? limit : 10;
+    let products = await productManagerDB.getProducts({}, limit);
     res.json(products);
   } catch (error) {
     res.status(500).json({ error: "Hubo un error al obtener los productos." });
@@ -25,16 +20,14 @@ router.get("/", async (req, res) => {
 // Obtener un producto por su ID
 router.get("/:pid", async (req, res) => {
   try {
+    // Validamos que el id sea correcto
+    const validation = mongoose.Types.ObjectId;
     if (req.params.pid) {
-      if (isNaN(req.params.pid) || req.params.pid <= 0) {
-        return res
-          .status(400)
-          .json({ error: "El ID ingresado es incorrecto." });
+      if (!validation.isValid(req.params.pid)) {
+        return res.status(404).json({ error: "ID Invalido." });
       }
     }
-    const product = await productManager.getProductById(
-      parseInt(req.params.pid)
-    );
+    const product = await productManagerDB.getProductById(req.params.pid);
     if (product === "Producto no encontrado") {
       res.status(404).json({ error: "Producto no encontrado." });
     } else {
@@ -48,7 +41,7 @@ router.get("/:pid", async (req, res) => {
 // Agregar un nuevo producto
 router.post("/", async (req, res) => {
   try {
-    const product = await productManager.addProduct(req.body);
+    const product = await productManagerDB.addProduct(req.body);
     if (product) {
       await req.app.get("ws").emit("newProduct", product);
       res.status(201).json(product);
@@ -60,24 +53,36 @@ router.post("/", async (req, res) => {
 
 // Actualizar un producto por ID
 router.put("/:pid", async (req, res) => {
+  // Validamos que el id sea correcto
+  const validation = mongoose.Types.ObjectId;
+  if (req.params.pid) {
+    if (!validation.isValid(req.params.pid)) {
+      return res.status(404).json({ error: "ID Invalido." });
+    }
+  }
   try {
-    const updatedProduct = await productManager.updateProduct(
-      parseInt(req.params.pid),
+    const updatedProduct = await productManagerDB.updateProduct(
+      req.params.pid,
       req.body
     );
     if (updatedProduct) res.json(updatedProduct);
     else res.status(404).send("Producto no encontrado");
   } catch (error) {
-    res.status(500).json({ error: "Hubo un error al obtener el producto." });
+    res.status(500).json({ error: error.message });
   }
 });
 
 // Eliminar un producto por ID
 router.delete("/:pid", async (req, res) => {
+  // Validamos que el id sea correcto
+  const validation = mongoose.Types.ObjectId;
+  if (req.params.pid) {
+    if (!validation.isValid(req.params.pid)) {
+      return res.status(404).json({ error: "ID Invalido." });
+    }
+  }
   try {
-    const message = await productManager.deleteProduct(
-      parseInt(req.params.pid)
-    );
+    const message = await productManagerDB.deleteProduct(req.params.pid);
     await req.app.get("ws").emit("removeProduct", req.params.pid);
     res.send(message);
   } catch (error) {

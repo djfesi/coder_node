@@ -4,7 +4,7 @@ const ProductManager = require('./productManager'); // Asegúrate de ajustar la 
 class CartManager {
   constructor(path) {
     this.path = path;
-    this.productManager = new ProductManager(`${__dirname}/../../data/products.json`);
+    this.productManager = new ProductManager(`${__dirname}/../../../data/products.json`);
   }
   // Creamos el carro de compras
   async createCart() {
