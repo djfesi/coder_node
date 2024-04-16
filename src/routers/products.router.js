@@ -10,9 +10,24 @@ router.get("/", async (req, res) => {
   try {
     let limit = parseInt(req.query.limit);
     limit = !isNaN(limit) && limit > 0 ? limit : 10;
-    let products = await productManagerDB.getProducts({}, limit);
-    products = products.map(prod => prod.toObject());
-    res.json(products);
+    let page = parseInt(req.query.page);
+    page = !isNaN(page) && page > 1 ? page : 1;
+    let sort = req.query.sort;
+    if (sort === "asc" || sort === "desc") {
+      sortOption = { price: sort === "asc" ? 1 : -1 };
+    } else {
+      sortOption = null;
+    }
+
+    let options = {
+      page,
+      limit,
+      sort: sortOption,
+      lean: true,
+    };
+
+    let result = await productManagerDB.getProducts({}, options);
+      res.json(result);
   } catch (error) {
     res.status(500).json({ error: "Hubo un error al obtener los productos." });
   }

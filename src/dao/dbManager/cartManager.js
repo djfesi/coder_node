@@ -15,7 +15,7 @@ class CartManager {
 
   // Buscamos el Cart por su Id y devolvemos los productos
   async getCartProducts(cartId) {
-    const carts = await Cart.findById(cartId);
+    const carts = await Cart.findById(cartId).populate('products.product');
     return carts ? carts.products : null;
   }
 

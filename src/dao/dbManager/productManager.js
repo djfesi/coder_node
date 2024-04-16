@@ -40,10 +40,10 @@ class ProductManager {
     }
 
     // Validacion para chequear la existencia del mismo
-    const replicatedProduct = await this.getProducts({ code });
-    if (replicatedProduct.length) {
+    const productCheck = await this.getProducts({ code }, { limit: 1 });
+    if (productCheck.payload?.length > 0) {
       console.error("El código del producto ya existe.");
-      return;
+      return null;
     }
 
     const statusValidate = typeof status === "boolean" ? status : true;
@@ -58,11 +58,28 @@ class ProductManager {
     }
   }
 
-  async getProducts(conditions, limit = 0) {
+  async getProducts(conditions, options) {
     try {
-      const products = await ProductModel.find(conditions).limit(limit); ;
-      return products;
+      const products = await ProductModel.paginate(conditions, options);
+      let response = {
+        status: "success",
+        payload: products.docs,
+        totalPages: products.totalPages,
+        prevPage: products.prevPage,
+        nextPage: products.nextPage,
+        page: products.page,
+        hasPrevPage: products.hasPrevPage,
+        hasNextPage: products.hasNextPage,
+        prevLink: products.hasPrevPage
+          ? `/api/products?page=${products.prevPage}&limit=${options.limit}`
+          : null,
+        nextLink: products.hasNextPage
+          ? `/api/products?page=${products.nextPage}&limit=${options.limit}`
+          : null,
+      };
+      return response;
     } catch (error) {
+      res.status(500).json({ status: 'error', error: error.message });
       return [];
     }
   }
@@ -76,7 +93,7 @@ class ProductManager {
       }
       return product;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return;
     }
   }

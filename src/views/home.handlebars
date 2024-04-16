@@ -1,6 +1,19 @@
 <div class="container mt-4">
+    <div class="row mb-3">
+    <div class="col text-center">
+      <p>Quantity:</p>
+      <a href="/products?page={{products.page}}&limit=10" class="btn btn-primary">10 items</a>
+      <a href="/products?page={{products.page}}&limit=5" class="btn btn-primary">5 items</a>
+      <a href="/products?page={{products.page}}&limit=3" class="btn btn-primary">3 items</a>
+    </div>
+    <div class="col text-center">
+      <p>Sort by:</p>
+      <a href="/products?page={{products.page}}&limit={{products.payload.length}}&sort=asc" class="btn btn-primary">Upward</a>
+      <a href="/products?page={{products.page}}&limit={{products.payload.length}}&sort=desc" class="btn btn-secondary">Falling</a>
+    </div>
+  </div>
   <div class="row">
-    {{#each products}}
+    {{#each products.payload}}
       <div class="col-md-4 mb-4">
         <div class="card">
           <img
@@ -17,4 +30,42 @@
       </div>
     {{/each}}
   </div>
+</div>
+ <nav>
+    <ul class="pagination justify-content-center">
+      {{#if products.hasPrevPage}}
+        <li class="page-item">
+          <a class="page-link" href="/products?page={{products.prevPage}}" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+            <span class="sr-only">Previous</span>
+          </a>
+        </li>
+      {{else}}
+        <li class="page-item disabled">
+          <a class="page-link" href="#" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+            <span class="sr-only">Previous</span>
+          </a>
+        </li>
+      {{/if}}
+      {{#if products.hasNextPage}}
+        <li class="page-item">
+          <a class="page-link" href="/products?page={{products.nextPage}}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>
+          </a>
+        </li>
+      {{else}}
+        <li class="page-item disabled">
+          <a class="page-link" href="#" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>
+          </a>
+        </li>
+      {{/if}}
+      <li class="ml-2 d-flex align-items-center mt-2">
+          <p>Actual page: {{products.page}}</p>
+      </li>
+    </ul>
+  </nav>
 </div>
