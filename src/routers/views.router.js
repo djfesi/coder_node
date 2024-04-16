@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const ProductManagerDB = require("../dao/dbManager/productManager");
+const CartManagerDB = require("../dao/dbManager/cartManager");
 
 const productManagerDB = new ProductManagerDB();
+const cartManagerDB = new CartManagerDB();
 
 router.get("/products", async (req, res) => {
   const { page, limit, sort } = req.query;
@@ -61,4 +63,23 @@ router.get("/chat", async (_, res) => {
   });
 });
 
+router.get("/carts/:cid", async (req, res) => {
+  try {
+    const cartId = req.params.cid;
+    const cartProducts = await cartManagerDB.getCartProducts(cartId);
+    console.log(cartProducts);
+    if (cartProducts) {
+      res.render("cart", {
+        title: "Cart Details",
+        cartId: cartId,
+        products: cartProducts,
+        isEmpty: cartProducts.length === 0,
+      });
+    } else {
+      res.status(404).render("error", { message: "Carrito no encontrado" });
+    }
+  } catch (error) {
+    res.status(500).render("error", { message: "Error al obtener el carrito" });
+  }
+});
 module.exports = router;

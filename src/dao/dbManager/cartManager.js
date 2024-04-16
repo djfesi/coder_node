@@ -15,7 +15,7 @@ class CartManager {
 
   // Buscamos el Cart por su Id y devolvemos los productos
   async getCartProducts(cartId) {
-    const carts = await Cart.findById(cartId).populate('products.product');
+    const carts = await Cart.findById(cartId).populate('products.product').lean();
     return carts ? carts.products : null;
   }
 
@@ -41,6 +41,41 @@ class CartManager {
 
     await cart.save();
   }
+
+  // Actualizar la cantidad de un producto
+  async updateProductQuantity(cartId, productId, quantity) {
+    const cart = await Cart.findById(cartId);
+    if (!cart) throw new Error("Carrito no encontrado");
+    const productIndex = cart.products.findIndex(p => p.product.toString() === productId.toString());
+    if (productIndex === -1) throw new Error("Producto no encontrado en el carrito");
+    cart.products[productIndex].quantity = quantity;
+    await cart.save();
+}
+
+// Eliminar un producto del carro
+async removeProductFromCart(cartId, productId) {
+    console.log(cartId, productId);
+    const cart = await Cart.findById(cartId);
+    if (!cart) throw new Error("Carrito no encontrado");
+    const newProducts = cart.products.filter(p => p.product.toString() !== productId.toString());
+    cart.products = newProducts;
+    await cart.save();
+}
+
+// Vaciar el carro por completo
+async emptyCart(cartId) {
+    const cart = await Cart.findById(cartId);
+    if (!cart) throw new Error("Carrito no encontrado");
+    cart.products = [];
+    await cart.save();
+}
+
+async updateCart(cartId, products) {
+    const cart = await Cart.findById(cartId);
+    if (!cart) throw new Error("Carrito no encontrado");
+    cart.products = products.map(p => ({ product: p.product, quantity: p.quantity }));
+    await cart.save();
+}
 }
 
 module.exports = CartManager;
