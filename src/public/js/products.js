@@ -1,3 +1,4 @@
+// Eliminar producto de bbdd
 document.addEventListener("click", function (event) {
   if (event.target.classList.contains("btn-delete-product")) {
     const productId = event.target.dataset.productId;
@@ -20,6 +21,7 @@ document.addEventListener("click", function (event) {
   }
 });
 
+// Validacion para los botones del carrito de compra
 document.addEventListener("DOMContentLoaded", function () {
   const cartId = localStorage.getItem("cartId");
   if (cartId) {
@@ -38,6 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
+// Crear carrito de compras
 $(document).ready(function () {
   $("#generate-cart-btn").click(function (event) {
     event.preventDefault();
@@ -57,5 +60,46 @@ $(document).ready(function () {
       .catch((error) => {
         console.error("Error al generar el carrito:", error);
       });
+  });
+});
+
+// Agregar productos al carro
+document.addEventListener("DOMContentLoaded", function () {
+  const addToCartButtons = document.querySelectorAll(".add-to-cart-btn");
+  addToCartButtons.forEach(function(button) {
+    button.addEventListener("click", function() {
+      const productId = button.getAttribute("data-product-id");
+      const cartId = localStorage.getItem("cartId");
+      if (cartId) {
+        fetch(`/api/carts/${cartId}/products/${productId}`, {
+          method: "POST",
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("Error al agregar producto al carrito");
+          }
+          Swal.fire({
+            text: "Producto agregado al carrito",
+            toast: true,
+            position: "top-right",
+            timer: 3000,
+            timerProgressBar: true,
+          });
+        })
+        .catch(error => {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Hubo un error al agregar el producto al carrito",
+          });
+        });
+      } else {
+        Swal.fire({
+          icon: "warning",
+          title: "Oops...",
+          text: "Primero debes generar un carrito",
+        });
+      }
+    });
   });
 });
