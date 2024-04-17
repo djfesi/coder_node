@@ -19,3 +19,43 @@ document.addEventListener("click", function (event) {
     }
   }
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+  const cartId = localStorage.getItem("cartId");
+  if (cartId) {
+    const generateCartBtn = document.getElementById("generate-cart-btn");
+    const shoppingCartBtn = document.getElementById("shopping-cart-btn");
+    if (generateCartBtn) generateCartBtn.style.display = "none";
+    if (shoppingCartBtn) shoppingCartBtn.style.display = "block";
+    const cartLink = document.getElementById("shopping-cart-link");
+    cartLink.href = `/carts/${cartId}`;
+  } else {
+    const generateCartBtn = document.getElementById("generate-cart-btn");
+    const shoppingCartBtn = document.getElementById("shopping-cart-btn");
+    if (generateCartBtn) generateCartBtn.style.display = "block";
+    if (shoppingCartBtn) shoppingCartBtn.style.display = "none";
+    console.log("No hay carrito generado.");
+  }
+});
+
+$(document).ready(function () {
+  $("#generate-cart-btn").click(function (event) {
+    event.preventDefault();
+    fetch("/api/carts/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        localStorage.setItem("cartId", data.id);
+        window.location.href = "/carts/" + data.id;
+      })
+      .catch((error) => {
+        console.error("Error al generar el carrito:", error);
+      });
+  });
+});

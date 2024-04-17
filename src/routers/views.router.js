@@ -67,13 +67,13 @@ router.get("/carts/:cid", async (req, res) => {
   try {
     const cartId = req.params.cid;
     const cartProducts = await cartManagerDB.getCartProducts(cartId);
-    console.log(cartProducts);
     if (cartProducts) {
       res.render("cart", {
         title: "Cart Details",
         cartId: cartId,
         products: cartProducts,
         isEmpty: cartProducts.length === 0,
+        scripts: ["products.js"],
       });
     } else {
       res.status(404).render("error", { message: "Carrito no encontrado" });

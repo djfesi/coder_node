@@ -54,7 +54,6 @@ class CartManager {
 
 // Eliminar un producto del carro
 async removeProductFromCart(cartId, productId) {
-    console.log(cartId, productId);
     const cart = await Cart.findById(cartId);
     if (!cart) throw new Error("Carrito no encontrado");
     const newProducts = cart.products.filter(p => p.product.toString() !== productId.toString());
