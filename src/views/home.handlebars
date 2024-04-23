@@ -1,4 +1,15 @@
 <div class="container mt-4">
+    {{#if userLogged}}
+  <div class="row">
+    <div class="col-12">
+      <div class="card text-center mb-3">
+        <div class="card-body">
+          <h5 class="card-title">Welcome, {{user}}!</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+  {{/if}}
     <div class="row mb-3">
     <div class="col text-center">
       <p>Quantity:</p>

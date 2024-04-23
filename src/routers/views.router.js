@@ -13,8 +13,10 @@ const cartManagerDB = new CartManagerDB();
 
 router.get("/products", async (req, res) => {
   let userLogged = false;
+  let user;
   if (req.session.user) {
     userLogged = true;
+    user = await User.findOne({ email: req.session.user.email });
   }
   const { page, limit, sort } = req.query;
   if (sort === "asc" || sort === "desc") {
@@ -33,6 +35,7 @@ router.get("/products", async (req, res) => {
     res.render("home", {
       title: "List products",
       userLogged: userLogged,
+      user: user.firstName,
       products: products,
       useWS: false,
       scripts: ["products.js"],
