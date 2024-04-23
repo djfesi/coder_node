@@ -1,5 +1,10 @@
 const express = require("express");
 const router = express.Router();
+const {
+  userIsLoggedIn,
+  userIsNotLoggedIn,
+} = require("./../dao/middlewares/auth.middleware");
+const User = require("./../dao/models/user.model");
 const ProductManagerDB = require("../dao/dbManager/productManager");
 const CartManagerDB = require("../dao/dbManager/cartManager");
 
@@ -63,7 +68,7 @@ router.get("/chat", async (_, res) => {
   });
 });
 
-router.get("/carts/:cid", async (req, res) => {
+router.get("/carts/:cid", userIsLoggedIn, async (req, res) => {
   try {
     const cartId = req.params.cid;
     const cartProducts = await cartManagerDB.getCartProducts(cartId);
@@ -81,5 +86,34 @@ router.get("/carts/:cid", async (req, res) => {
   } catch (error) {
     res.status(500).render("error", { message: "Error al obtener el carrito" });
   }
+});
+
+router.get("/register", userIsNotLoggedIn, (_, res) => {
+  res.render("register", {
+    title: "Register",
+  });
+});
+
+router.get("/login", userIsNotLoggedIn, (_, res) => {
+  res.render("login", {
+    title: "Login",
+  });
+});
+
+router.get("/profile", userIsLoggedIn, async (req, res) => {
+  const idFromSession = req.session.user._id;
+  const userRole = req.signedCookies.userRole;
+
+  const user = await User.findOne({ _id: idFromSession });
+  res.render("profile", {
+    title: "My Profile",
+    userRole: userRole,
+    user: {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      age: user.age,
+      email: user.email,
+    },
+  });
 });
 module.exports = router;

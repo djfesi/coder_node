@@ -66,33 +66,33 @@ $(document).ready(function () {
 // Agregar productos al carro
 document.addEventListener("DOMContentLoaded", function () {
   const addToCartButtons = document.querySelectorAll(".add-to-cart-btn");
-  addToCartButtons.forEach(function(button) {
-    button.addEventListener("click", function() {
+  addToCartButtons.forEach(function (button) {
+    button.addEventListener("click", function () {
       const productId = button.getAttribute("data-product-id");
       const cartId = localStorage.getItem("cartId");
       if (cartId) {
         fetch(`/api/carts/${cartId}/products/${productId}`, {
           method: "POST",
         })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error("Error al agregar producto al carrito");
-          }
-          Swal.fire({
-            text: "Producto agregado al carrito",
-            toast: true,
-            position: "top-right",
-            timer: 3000,
-            timerProgressBar: true,
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Error al agregar producto al carrito");
+            }
+            Swal.fire({
+              text: "Producto agregado al carrito",
+              toast: true,
+              position: "top-right",
+              timer: 3000,
+              timerProgressBar: true,
+            });
+          })
+          .catch((error) => {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Hubo un error al agregar el producto al carrito",
+            });
           });
-        })
-        .catch(error => {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Hubo un error al agregar el producto al carrito",
-          });
-        });
       } else {
         Swal.fire({
           icon: "warning",
@@ -101,5 +101,34 @@ document.addEventListener("DOMContentLoaded", function () {
         });
       }
     });
+  });
+});
+
+// Cerrar sesion
+document.addEventListener("DOMContentLoaded", function () {
+  const logoutBtn = document.getElementById("log-out");
+  button.addEventListener("click", function () {
+    fetch(`/api/session/logout`, {
+      method: "POST",
+    })
+      // .then((response) => {
+      //   if (!response.ok) {
+      //     throw new Error("Error al agregar producto al carrito");
+      //   }
+      //   Swal.fire({
+      //     text: "Producto agregado al carrito",
+      //     toast: true,
+      //     position: "top-right",
+      //     timer: 3000,
+      //     timerProgressBar: true,
+      //   });
+      // })
+      // .catch((error) => {
+      //   Swal.fire({
+      //     icon: "error",
+      //     title: "Oops...",
+      //     text: "Hubo un error al agregar el producto al carrito",
+      //   });
+      // });
   });
 });
