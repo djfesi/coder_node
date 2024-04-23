@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const User = require("./../dao/models/user.model");
+
 const router = Router();
 
 router.post("/login", async (req, res) => {
@@ -16,7 +17,6 @@ router.post("/login", async (req, res) => {
   req.session.user = { email, _id: user._id.toString() };
   const role = email === "adminCoder@coder.com" ? "Admin" : "User";
   res.cookie("userRole", role, { signed: true });
-
   res.redirect("/products");
 });
 
@@ -37,9 +37,9 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.post("/logout", (req, res) => {
-  res.clearCookie("userRole");
-  req.session.destroy((_) => {
+router.get("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    res.clearCookie("userRole");
     res.redirect("/login");
   });
 });

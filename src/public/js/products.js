@@ -105,30 +105,16 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Cerrar sesion
-document.addEventListener("DOMContentLoaded", function () {
-  const logoutBtn = document.getElementById("log-out");
-  button.addEventListener("click", function () {
-    fetch(`/api/session/logout`, {
-      method: "POST",
+document.addEventListener("click", function (event) {
+  if (event.target.classList.contains("log-out")) {
+    fetch(`/api/sessions/logout`, {
+      method: "GET",
     })
-      // .then((response) => {
-      //   if (!response.ok) {
-      //     throw new Error("Error al agregar producto al carrito");
-      //   }
-      //   Swal.fire({
-      //     text: "Producto agregado al carrito",
-      //     toast: true,
-      //     position: "top-right",
-      //     timer: 3000,
-      //     timerProgressBar: true,
-      //   });
-      // })
-      // .catch((error) => {
-      //   Swal.fire({
-      //     icon: "error",
-      //     title: "Oops...",
-      //     text: "Hubo un error al agregar el producto al carrito",
-      //   });
-      // });
-  });
+      .then((response) => {
+        window.location.href = "/login";
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
 });

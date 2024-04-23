@@ -33,18 +33,33 @@
           <li class="nav-item">
             <a class="nav-link" href="./../chat">Chat</a>
           </li>
-          <li class="nav-item" id="generate-cart-btn">
-            <a class="nav-link">Generate Cart</a>
-          </li>
+          {{#if userLogged}}
+            <li class="nav-item" id="generate-cart-btn">
+              <a class="nav-link">Generate Cart</a>
+            </li>
 
-          <li class="nav-item" id="shopping-cart-btn">
-            <a
-              id="shopping-cart-link"
-              class="nav-link"
-              href="./../carts/"
-            >Shopping Cart</a>
-          </li>
-
+            <li class="nav-item" id="shopping-cart-btn">
+              <a
+                id="shopping-cart-link"
+                class="nav-link"
+                href="./../carts/"
+              >Shopping Cart</a>
+            </li>
+          {{/if}}
+        </ul>
+        <ul class="navbar-nav ml-auto">
+          {{#if userLogged}}
+            <li class="nav-item">
+              <a class="nav-link" href="/profile">Profile</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link log-out" style="cursor: pointer;">Logout</a>
+            </li>
+          {{else}}
+            <li class="nav-item">
+              <a class="nav-link" href="/login">Login</a>
+            </li>
+          {{/if}}
         </ul>
       </div>
     </nav>

@@ -12,6 +12,10 @@ const productManagerDB = new ProductManagerDB();
 const cartManagerDB = new CartManagerDB();
 
 router.get("/products", async (req, res) => {
+  let userLogged = false;
+  if (req.session.user) {
+    userLogged = true;
+  }
   const { page, limit, sort } = req.query;
   if (sort === "asc" || sort === "desc") {
     sortOption = { price: sort === "asc" ? 1 : -1 };
@@ -28,6 +32,7 @@ router.get("/products", async (req, res) => {
     let products = await productManagerDB.getProducts({}, options);
     res.render("home", {
       title: "List products",
+      userLogged: userLogged,
       products: products,
       useWS: false,
       scripts: ["products.js"],
@@ -39,6 +44,10 @@ router.get("/products", async (req, res) => {
 });
 
 router.get("/realtimeproducts", async (req, res) => {
+  let userLogged = false;
+  if (req.session.user) {
+    userLogged = true;
+  }
   const { page, limit, sort } = req.query;
   if (sort === "asc" || sort === "desc") {
     sortOption = { price: sort === "asc" ? 1 : -1 };
@@ -54,21 +63,30 @@ router.get("/realtimeproducts", async (req, res) => {
   let products = await productManagerDB.getProducts({}, options);
   res.render("realTimeProducts", {
     title: "Live products",
+    userLogged: userLogged,
     products: products,
     useWS: true,
     scripts: ["live_products.js", "products.js"],
   });
 });
 
-router.get("/chat", async (_, res) => {
+router.get("/chat", async (req, res) => {
+  let userLogged = false;
+  if (req.session.user) {
+    userLogged = true;
+  }
   res.render("chat", {
     title: "Messages",
+    userLogged: userLogged,
     useWS: true,
     scripts: ["chat.js"],
   });
 });
 
 router.get("/carts/:cid", userIsLoggedIn, async (req, res) => {
+  if (req.session.user) {
+    userLogged = true;
+  }
   try {
     const cartId = req.params.cid;
     const cartProducts = await cartManagerDB.getCartProducts(cartId);
@@ -76,6 +94,7 @@ router.get("/carts/:cid", userIsLoggedIn, async (req, res) => {
       res.render("cart", {
         title: "Cart Details",
         cartId: cartId,
+        userLogged: userLogged,
         products: cartProducts,
         isEmpty: cartProducts.length === 0,
         scripts: ["products.js"],
@@ -103,11 +122,16 @@ router.get("/login", userIsNotLoggedIn, (_, res) => {
 router.get("/profile", userIsLoggedIn, async (req, res) => {
   const idFromSession = req.session.user._id;
   const userRole = req.signedCookies.userRole;
+  let userLogged = false;
+  if (req.session.user) {
+    userLogged = true;
+  }
 
   const user = await User.findOne({ _id: idFromSession });
   res.render("profile", {
     title: "My Profile",
     userRole: userRole,
+    userLogged: userLogged,
     user: {
       firstName: user.firstName,
       lastName: user.lastName,
