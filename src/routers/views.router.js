@@ -35,7 +35,7 @@ router.get("/products", async (req, res) => {
     res.render("home", {
       title: "List products",
       userLogged: userLogged,
-      user: user.firstName,
+      user: user?.firstName ? user.firstName : "",
       products: products,
       useWS: false,
       scripts: ["products.js"],
