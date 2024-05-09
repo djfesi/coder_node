@@ -10,7 +10,7 @@ const { dbName, mongoUrl } = require("./dbConfig");
 const sessionMiddleware = require("./session/mongoStorage");
 const initializeStrategyWithGitHub = require("./config/passport-github.config");
 const initializeStrategy = require("./config/passport.config");
-
+const initializeStrategyWithJWT =  require("./config/passport-jwt.config");
 const productRouter = require("./routers/products.router");
 const cartRouter = require("./routers/carts.router");
 const viewsRouter = require("./routers/views.router");
@@ -23,6 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(sessionMiddleware);
 initializeStrategy();
 initializeStrategyWithGitHub();
+initializeStrategyWithJWT()
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(cookieParser("coder1234"));

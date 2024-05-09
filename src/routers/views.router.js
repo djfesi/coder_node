@@ -14,8 +14,10 @@ const cartManagerDB = new CartManagerDB();
 router.get("/products", async (req, res) => {
   let userLogged = false;
   let user;
-  if (req.session.user) {
+  if (req.cookies["accessToken"]) {
     userLogged = true;
+  }
+  if (req.session.user) {
     user = await User.findOne({ email: req.session.user.email });
   }
   const { page, limit, sort } = req.query;
@@ -48,7 +50,7 @@ router.get("/products", async (req, res) => {
 
 router.get("/realtimeproducts", async (req, res) => {
   let userLogged = false;
-  if (req.session.user) {
+  if (req.cookies["accessToken"]) {
     userLogged = true;
   }
   const { page, limit, sort } = req.query;
@@ -75,19 +77,19 @@ router.get("/realtimeproducts", async (req, res) => {
 
 router.get("/chat", async (req, res) => {
   let userLogged = false;
-  if (req.session.user) {
+  if (req.cookies["accessToken"]) {
     userLogged = true;
   }
   res.render("chat", {
     title: "Messages",
     userLogged: userLogged,
     useWS: true,
-    scripts: ["chat.js"],
+    scripts: ["chat.js", "products.js"],
   });
 });
 
 router.get("/carts/:cid", userIsLoggedIn, async (req, res) => {
-  if (req.session.user) {
+  if (req.cookies["accessToken"]) {
     userLogged = true;
   }
   try {
@@ -119,6 +121,7 @@ router.get("/register", userIsNotLoggedIn, (_, res) => {
 router.get("/login", userIsNotLoggedIn, (_, res) => {
   res.render("login", {
     title: "Login",
+    scripts: ["auth.js"],
   });
 });
 
@@ -126,7 +129,7 @@ router.get("/profile", userIsLoggedIn, async (req, res) => {
   const idFromSession = req.session.user._id;
   const userRole = req.signedCookies.userRole;
   let userLogged = false;
-  if (req.session.user) {
+  if (req.cookies["accessToken"]) {
     userLogged = true;
   }
 
@@ -141,6 +144,7 @@ router.get("/profile", userIsLoggedIn, async (req, res) => {
       age: user.age,
       email: user.email,
     },
+    scripts: ["products.js"],
   });
 });
 module.exports = router;
