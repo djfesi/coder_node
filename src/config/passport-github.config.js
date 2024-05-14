@@ -3,6 +3,7 @@ const { Strategy } = require("passport-github2");
 const User = require("../dao/models/user.model");
 // const hashingUtils = require("../utils/hashing");
 const { clientID, clientSecret, callbackURL } = require("./github.private");
+const cartModel = require("../dao/models/cart.model");
 
 const initializeStrategy = () => {
   passport.use(
@@ -31,6 +32,9 @@ const initializeStrategy = () => {
             : lastName;
 
           // DEBIDO A QUE NO SE PUEDE TOMAR EL EMAIL DE GITHUB TOMA EL NOMBRE DE USUARIO EN CASO DE NO RECIBIR EL MAIL
+
+          const newCart = new cartModel({ products: [] });
+          await newCart.save();
           const newUser = {
             firstName,
             lastName,
@@ -39,6 +43,7 @@ const initializeStrategy = () => {
               ? profile._json.email
               : profile._json.login,
             password: "",
+            cart: newCart._id,
           };
 
           const result = await User.create(newUser);

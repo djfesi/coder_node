@@ -8,6 +8,7 @@ const UserSchema = new Schema({
   email: { type: String, unique: true },
   password: { type: String },
   rol: { type: String, default: "user" },
+  cart: { type: mongoose.Schema.Types.ObjectId, ref: "Cart" } 
 });
 
 module.exports = mongoose.model("User", UserSchema);

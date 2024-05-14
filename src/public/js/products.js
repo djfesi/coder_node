@@ -111,6 +111,7 @@ document.addEventListener("click", function (event) {
       method: "GET",
     })
       .then((response) => {
+        localStorage.clear();
         window.location.href = "/login";
       })
       .catch((error) => {

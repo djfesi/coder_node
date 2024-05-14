@@ -11,6 +11,10 @@ const CartManagerDB = require("../dao/dbManager/cartManager");
 const productManagerDB = new ProductManagerDB();
 const cartManagerDB = new CartManagerDB();
 
+router.get('/', (_, res) => {
+  res.redirect('/products'); 
+});
+
 router.get("/products", async (req, res) => {
   let userLogged = false;
   let user;

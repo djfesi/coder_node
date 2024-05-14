@@ -14,6 +14,7 @@ document
     })
       .then((result) => result.json())
       .then((json) => {
+        if (json.cartId) localStorage.setItem("cartId", json.cartId);
         if (json.token) window.location.href = "./products";
       });
   });

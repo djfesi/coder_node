@@ -26,7 +26,7 @@ router.post(
       maxAge: 60 * 60 * 1000,
       httpOnly: true,
     });
-    res.status(200).json({ token });
+    res.status(200).json({ token, cartId: req.user.cart });
   }
 );
 
@@ -76,6 +76,7 @@ router.get(
 router.get("/logout", (req, res) => {
   req.session.destroy((err) => {
     res.clearCookie("userRole");
+    res.clearCookie("cartId");
     res.clearCookie("accessToken");
     res.redirect("/login");
   });
