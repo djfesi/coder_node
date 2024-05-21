@@ -1,4 +1,4 @@
 module.exports = {
-    dbName: 'ecommerce',
-    mongoUrl: 'mongodb+srv://fede:fede1234@ecommerce.z3spuc0.mongodb.net/'
+    dbName: process.env.DB_NAME,
+    mongoUrl: process.env.MONGO_URI
 }

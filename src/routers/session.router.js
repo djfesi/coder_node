@@ -1,5 +1,4 @@
 const { Router } = require("express");
-const User = require("./../dao/models/user.model");
 const passport = require("passport");
 const { generateToken } = require("../utils/jwt");
 const passportMiddleware = require("../utils/passportMiddleware");

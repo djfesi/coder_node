@@ -1,8 +1,8 @@
 const passport = require("passport");
 const { Strategy } = require("passport-local");
-const User = require("../dao/models/user.model");
+const User = require("../models/user.model");
 const hashingUtils = require("../utils/hashing");
-const cartModel = require("../dao/models/cart.model");
+const cartModel = require("../models/cart.model");
 
 const initializeStrategy = () => {
   passport.use(

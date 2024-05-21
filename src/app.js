@@ -4,8 +4,9 @@ const { Server } = require("socket.io");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
+require("dotenv/config")
 
-const messagesModel = require("./dao/models/messages.model");
+const messagesModel = require("./models/messages.model");
 const { dbName, mongoUrl } = require("./dbConfig");
 const sessionMiddleware = require("./session/mongoStorage");
 const initializeStrategyWithGitHub = require("./config/passport-github.config");
@@ -23,15 +24,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(sessionMiddleware);
 initializeStrategy();
 initializeStrategyWithGitHub();
-initializeStrategyWithJWT()
+initializeStrategyWithJWT();
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(cookieParser("coder1234"));
+
 // HBS
-app.engine("handlebars", handlebars.engine());
+app.engine("handlebars", handlebars.engine( ));
 app.set("views", `${__dirname}/views`);
 app.set("view engine", "handlebars");
-
 // Routers
 app.use("/api/products", productRouter);
 app.use("/api/carts", cartRouter);
