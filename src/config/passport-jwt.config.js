@@ -15,7 +15,7 @@ const initializeStrategy = () => {
       },
       async (jwtPayload, done) => {
         try {
-          return done(null, jwtPayload.email);
+          return done(null, jwtPayload);
         } catch (error) {
           done(error);
         }

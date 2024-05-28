@@ -51,6 +51,15 @@ class CartController {
     }
   }
 
+  async purchaseCart(req, res) {
+    try {
+      const result = await this.ticketService.purchaseCart(req.params.cid, req.user.email);
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
   async emptyCart(req, res) {
     try {
       await this.cartService.emptyCart(req.params.cid);

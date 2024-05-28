@@ -4,18 +4,19 @@ const { Server } = require("socket.io");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
-require("dotenv/config")
+require("dotenv/config");
 
 const messagesModel = require("./models/messages.model");
 const { dbName, mongoUrl } = require("./dbConfig");
 const sessionMiddleware = require("./session/mongoStorage");
 const initializeStrategyWithGitHub = require("./config/passport-github.config");
 const initializeStrategy = require("./config/passport.config");
-const initializeStrategyWithJWT =  require("./config/passport-jwt.config");
+const initializeStrategyWithJWT = require("./config/passport-jwt.config");
 const productRouter = require("./routers/products.router");
 const cartRouter = require("./routers/carts.router");
 const viewsRouter = require("./routers/views.router");
 const sessionsRouter = require("./routers/session.router");
+const { authorizeUser } = require("./middlewares/auth.middleware");
 
 const app = express();
 app.use(express.static(`${__dirname}/public`));
@@ -30,12 +31,12 @@ app.use(passport.session());
 app.use(cookieParser("coder1234"));
 
 // HBS
-app.engine("handlebars", handlebars.engine( ));
+app.engine("handlebars", handlebars.engine());
 app.set("views", `${__dirname}/views`);
 app.set("view engine", "handlebars");
 // Routers
 app.use("/api/products", productRouter);
-app.use("/api/carts", cartRouter);
+app.use("/api/carts", authorizeUser, cartRouter);
 app.use("/api/sessions", sessionsRouter);
 app.use("/", viewsRouter); // Views
 

@@ -1,9 +1,10 @@
 const { Router } = require("express");
 const passport = require("passport");
-const { generateToken } = require("../utils/jwt");
 const passportMiddleware = require("../utils/passportMiddleware");
+const SessionController = require("../controllers/session.controller");
 
 const router = Router();
+const sessionController = new SessionController();
 
 router.post(
   "/login",
@@ -11,30 +12,15 @@ router.post(
     failureRedirect: "/api/sessions/faillogin",
     failureFlash: true,
   }),
-  async (req, res) => {
-    req.session.user = { email: req.user.email, _id: req.user._id.toString() };
-    const role = req.user.email === "adminCoder@coder.com" ? "Admin" : "User";
-    res.cookie("userRole", role, { signed: true });
-    const credentials = {
-      email: req.user.email,
-      _id: req.user._id.toString(),
-      rol: req.user.rol,
-    };
-    const token = generateToken(credentials);
-    res.cookie("accessToken", token, {
-      maxAge: 60 * 60 * 1000,
-      httpOnly: true,
-    });
-    res.status(200).json({ token, cartId: req.user.cart });
-  }
+  (req, res) => sessionController.login(req, res)
 );
 
 router.get("/faillogin", (_, res) => {
   return res.status(401).json({ error: "Incorrect username and/or password." });
 });
 
-router.get("/current", passportMiddleware("jwt"), async (req, res) => {
-  return res.json(req.user);
+router.get("/current", passportMiddleware("jwt"), (req, res) => {
+  sessionController.current(req, res);
 });
 
 router.post(
@@ -42,13 +28,7 @@ router.post(
   passport.authenticate("register", {
     failureRedirect: "/api/sessions/failregister",
   }),
-  async (_, res) => {
-    try {
-      res.redirect("/products");
-    } catch (err) {
-      return res.status(500).json({ error: err });
-    }
-  }
+  (req, res) => sessionController.register(req, res)
 );
 
 router.get("/failregister", (_, res) => {
@@ -66,8 +46,7 @@ router.get(
   passport.authenticate("github", { failureRedirect: "/" }),
   (req, res) => {
     req.session.user = { email: req.user.email, _id: req.user._id.toString() };
-    const role = req.user.email === "adminCoder@coder.com" ? "Admin" : "User";
-    res.cookie("userRole", role, { signed: true });
+    res.cookie("userRole", req.user.rol, { signed: true });
     res.redirect("/products");
   }
 );
