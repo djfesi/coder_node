@@ -4,7 +4,11 @@
     <div class="col-12">
       <div class="card text-center mb-3">
         <div class="card-body">
-          <h5 class="card-title">Welcome, {{user}}!</h5>
+          {{#if user}}
+            <h5 class="card-title">Welcome, {{user}}!</h5>
+          {{else}}
+            <h5 class="card-title">Por favor volver a loguearse</h5>
+          {{/if}}
         </div>
       </div>
     </div>
@@ -35,9 +39,16 @@
           <div class="card-body">
             <h5 class="card-title">{{title}}</h5>
             <p class="card-text">{{description}}</p>
+            <p>
+              <span class="text-muted small">Disponible: {{this.stock}}</span>
+            </p>
             <p class="card-text">Price: ${{price}}</p>
             {{#if ../userLogged}}
+                  {{#if stock}}
             <button class="btn btn-primary add-to-cart-btn" data-product-id="{{_id}}">Add to Cart</button>
+                  {{else}}
+<span class="bg-light text-dark rounded p-2">SIN STOCK</span>
+                  {{/if}}
             {{/if}}
           </div>
         </div>

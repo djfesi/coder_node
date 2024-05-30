@@ -104,6 +104,69 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
+// Finalizar compra
+document.addEventListener("DOMContentLoaded", function () {
+  const btnPurcharse = document.querySelector(".purcharse");
+  btnPurcharse.addEventListener("click", function () {
+    const cartId = localStorage.getItem("cartId");
+    if (cartId) {
+      fetch(`/api/carts/${cartId}/purchase`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            return response.json().then((err) => {
+              throw err;
+            });
+          }
+          return response.json();
+        })
+        .then((data) => {
+          Swal.fire({
+            text: "Compra realizada",
+            toast: true,
+            position: "top-right",
+            timer: 5000,
+            timerProgressBar: true,
+          }).then(() => {
+            if (
+              data.unavailableProducts &&
+              data.unavailableProducts.length > 0
+            ) {
+              data.unavailableProducts.forEach((product) => {
+                Swal.fire({
+                  title: "Producto sin stock",
+                  text: `El producto "${product}" no tiene stock disponible.`,
+                  toast: true,
+                  position: "top-right",
+                  timer: 5000,
+                  timerProgressBar: true,
+                });
+                setTimeout(() => {}, 5000);
+              });
+            }
+          });
+        })
+        .catch((error) => {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: error.message || "No se pudo completar la compra",
+          });
+        });
+    } else {
+      Swal.fire({
+        icon: "warning",
+        title: "Oops...",
+        text: "No tienes generado un carrito de compras",
+      });
+    }
+  });
+});
+
 // Cerrar sesion
 document.addEventListener("click", function (event) {
   if (event.target.classList.contains("log-out")) {

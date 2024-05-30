@@ -5,24 +5,20 @@ const router = express.Router();
 const cartController = new CartController();
 
 // Crear carrito de compras
-router.post("/", (req, res) =>
-  cartController.createCart(req, res)
-);
+router.post("/", (req, res) => cartController.createCart(req, res));
+
+// Finalizar compra
+router.post("/:cid/purchase", (req, res) => {
+  cartController.purchaseCart(req, res);
+});
 
 // Agregar un producto al carrito
 router.post("/:cid/products/:pid", (req, res) =>
   cartController.addProductToCart(req, res)
 );
 
-// Finalizar compra
-router.post("/:cid/purchase", (req, res) =>
-  cartController.purchaseCart(req, res)
-);
-
 // Obtener productos de un carrito de compras por ID
-router.get("/:cid", (req, res) =>
-  cartController.getCartProducts(req, res)
-);
+router.get("/:cid", (req, res) => cartController.getCartProducts(req, res));
 
 // Eliminar un producto específico del carrito
 router.delete("/:cid/products/:pid", (req, res) =>
@@ -35,8 +31,6 @@ router.put("/:cid/products/:pid", (req, res) =>
 );
 
 // Eliminar todos los productos del carrito
-router.delete("/:cid", (req, res) =>
-  cartController.emptyCart(req, res)
-);
+router.delete("/:cid", (req, res) => cartController.emptyCart(req, res));
 
 module.exports = router;

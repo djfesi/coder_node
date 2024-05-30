@@ -17,7 +17,8 @@
             />
             <div class="info">
               <h5 class="mb-1">{{product.title}}</h5>
-              <small>Amount: {{quantity}}</small> -
+              <small>Amount: {{quantity}}</small>
+              -
               <small>Unit price: ${{product.price}}</small>
             </div>
           </div>
@@ -28,6 +29,12 @@
   <div class="text-center mt-4">
     <a href="/products" class="btn btn-primary">Return to product list</a>
   </div>
+  {{#if isEmpty}}  {{else}}
+    <div class="text-center mt-1">
+      <a class="btn btn-primary purcharse">Finalize purchase</a>
+    </div>
+  {{/if}}
+
 </div>
 <style>
   .container { background: white; padding: 20px; border-radius: 8px; box-shadow:
