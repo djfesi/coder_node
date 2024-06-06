@@ -16,6 +16,7 @@ const productRouter = require("./routers/products.router");
 const cartRouter = require("./routers/carts.router");
 const viewsRouter = require("./routers/views.router");
 const sessionsRouter = require("./routers/session.router");
+const mockRouter = require("./routers/mock.router");
 const { authorizeUser } = require("./middlewares/auth.middleware");
 
 const app = express();
@@ -39,6 +40,7 @@ app.use("/api/products", productRouter);
 app.use("/api/carts", authorizeUser, cartRouter);
 app.use("/api/sessions", sessionsRouter);
 app.use("/", viewsRouter); // Views
+app.use("/mockingproducts", mockRouter) // Mock
 
 const connectToDatabase = async () => {
   try {
