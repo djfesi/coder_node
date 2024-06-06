@@ -18,6 +18,7 @@ const viewsRouter = require("./routers/views.router");
 const sessionsRouter = require("./routers/session.router");
 const mockRouter = require("./routers/mock.router");
 const { authorizeUser } = require("./middlewares/auth.middleware");
+const { errorHandler } = require("./services/errors/errorHandler");
 
 const app = express();
 app.use(express.static(`${__dirname}/public`));
@@ -41,7 +42,7 @@ app.use("/api/carts", authorizeUser, cartRouter);
 app.use("/api/sessions", sessionsRouter);
 app.use("/", viewsRouter); // Views
 app.use("/mockingproducts", mockRouter) // Mock
-
+app.use(errorHandler)
 const connectToDatabase = async () => {
   try {
     await mongoose.connect(mongoUrl, { dbName });
