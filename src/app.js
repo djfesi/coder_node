@@ -19,11 +19,13 @@ const sessionsRouter = require("./routers/session.router");
 const mockRouter = require("./routers/mock.router");
 const { authorizeUser } = require("./middlewares/auth.middleware");
 const { errorHandler } = require("./services/errors/errorHandler");
+const { useLogger, logger } = require("./logger");
 
 const app = express();
 app.use(express.static(`${__dirname}/public`));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(useLogger)
 app.use(sessionMiddleware);
 initializeStrategy();
 initializeStrategyWithGitHub();
@@ -31,7 +33,6 @@ initializeStrategyWithJWT();
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(cookieParser("coder1234"));
-
 // HBS
 app.engine("handlebars", handlebars.engine());
 app.set("views", `${__dirname}/views`);
@@ -42,13 +43,14 @@ app.use("/api/carts", authorizeUser, cartRouter);
 app.use("/api/sessions", sessionsRouter);
 app.use("/", viewsRouter); // Views
 app.use("/mockingproducts", mockRouter) // Mock
+
 app.use(errorHandler)
 const connectToDatabase = async () => {
   try {
     await mongoose.connect(mongoUrl, { dbName });
-    console.log("Connect to MongoDB");
+    logger.info("Connected to MongoDB");
     const httpServer = app.listen(8080, () => {
-      console.log("Server running on port 8080");
+      logger.info("Server running on port 8080");
     });
 
     const wsServer = new Server(httpServer);
@@ -77,8 +79,17 @@ const connectToDatabase = async () => {
       });
     });
   } catch (error) {
-    console.error("Error connecting to MongoDB:", error);
+    logger.error("Error connecting to MongoDB:", error);
   }
 };
 
 connectToDatabase();
+app.get("/loggerTest", (req, res) => {
+  req.logger.debug("This is a debug message");
+  req.logger.http("This is an HTTP log message");
+  req.logger.info("This is an info message");
+  req.logger.warning("This is a warning message");
+  req.logger.error("This is an error message");
+  req.logger.fatal("This is a fatal error message");
+  res.send("Logger test completed, check your logs!");
+});

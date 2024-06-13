@@ -1,7 +1,9 @@
 const ProductModel = require("./../models/product.model");
 const { CustomError } = require("./errors/customError");
 const { ErrorCodes } = require("./errors/errorCode");
-const { generateInvalidProductDataError } = require("./errors/productsErrors/prodcutErrors");
+const {
+  generateInvalidProductDataError,
+} = require("./errors/productsErrors/prodcutErrors");
 
 class ProductService {
   async addProduct(product) {
@@ -26,6 +28,7 @@ class ProductService {
       category,
     ].some((v) => !v);
     if (hasInvalidFields) {
+      req.logger.error(`InvalidProductData`);
       throw CustomError.createError({
         name: "InvalidProductData",
         cause: generateInvalidProductDataError({
@@ -43,6 +46,7 @@ class ProductService {
     }
 
     if (typeof stock !== "number" || stock <= 0) {
+      req.logger.error(`InvalidProductData`);
       throw CustomError.createError({
         name: "InvalidProductData",
         cause: generateInvalidProductDataError({
@@ -60,6 +64,7 @@ class ProductService {
     }
 
     if (typeof price !== "number" || price <= 0) {
+      req.logger.error(`InvalidProductData`);
       throw CustomError.createError({
         name: "InvalidProductData",
         cause: generateInvalidProductDataError({
@@ -78,6 +83,7 @@ class ProductService {
 
     const productCheck = await ProductModel.findOne({ code });
     if (productCheck) {
+      req.logger.error(`DuplicateProductCode`);
       throw CustomError.createError({
         name: "DuplicateProductCode",
         cause: { code },
@@ -113,6 +119,7 @@ class ProductService {
           : null,
       };
     } catch (error) {
+      req.logger.error(`Error fetching products: ${error.message}`);
       throw CustomError.createError({
         name: "DatabaseError",
         cause: error,
@@ -125,6 +132,7 @@ class ProductService {
   async getProductById(id) {
     const product = await ProductModel.findById(id);
     if (!product) {
+      req.logger.error(`Error fetching product`);
       throw CustomError.createError({
         name: "ProductNotFoundError",
         cause: { id },
@@ -149,6 +157,7 @@ class ProductService {
       category,
     ].some((v) => !v);
     if (hasInvalidFields) {
+      req.logger.error(`Error updating product: Invalid data fields`);
       throw CustomError.createError({
         name: "InvalidProductData",
         cause: generateInvalidProductDataError({
@@ -166,40 +175,62 @@ class ProductService {
     }
 
     if (typeof stock !== "number" || stock <= 0) {
+      req.logger.error(`Error updating product: Invalid data`);
       throw CustomError.createError({
         name: "InvalidProductData",
-        cause: generateInvalidProductDataError({ title, description, price, thumbnail, code, stock, category }),
+        cause: generateInvalidProductDataError({
+          title,
+          description,
+          price,
+          thumbnail,
+          code,
+          stock,
+          category,
+        }),
         message: "El stock debe ser un número positivo mayor que cero.",
         code: ErrorCodes.INVALID_TYPES_ERROR,
       });
     }
 
     if (typeof price !== "number" || price <= 0) {
+      req.logger.error(`Error updating product: Invalid data`);
       throw CustomError.createError({
         name: "InvalidProductData",
-        cause: generateInvalidProductDataError({ title, description, price, thumbnail, code, stock, category }),
+        cause: generateInvalidProductDataError({
+          title,
+          description,
+          price,
+          thumbnail,
+          code,
+          stock,
+          category,
+        }),
         message: "El precio debe ser un valor positivo.",
         code: ErrorCodes.INVALID_TYPES_ERROR,
       });
     }
 
     const product = await ProductModel.findById(id);
-    if (!product)
+    if (!product) {
+      req.logger.error(`Error product not found`);
       throw CustomError.createError({
         name: "ProductNotFoundError",
         cause: { id },
         message: "Producto no encontrado",
         code: ErrorCodes.DATABASE_ERROR,
       });
+    }
     if (code && product.code !== code) {
       const codeExists = await ProductModel.findOne({ code });
-      if (codeExists)
+      if (codeExists) {
+        req.logger.error(`Error code product duplicate`);
         throw CustomError.createError({
           name: "DuplicateProductCode",
           cause: { code },
           message: "El código que quiere asignarle al producto ya existe.",
           code: ErrorCodes.PRODUCT_CREATION_ERROR,
         });
+      }
     }
 
     return await ProductModel.findByIdAndUpdate(id, updatedProduct, {
@@ -208,6 +239,7 @@ class ProductService {
   }
 
   async deleteProduct(id) {
+    req.logger.error(`Error deleting product`);
     const result = await ProductModel.findByIdAndDelete(id);
     if (!result) {
       throw CustomError.createError({
