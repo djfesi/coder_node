@@ -105,7 +105,9 @@ class ViewController {
         res.status(404).render("error", { message: "Carrito no encontrado" });
       }
     } catch (error) {
-      res.status(500).render("error", { message: "Error al obtener el carrito" });
+      res
+        .status(500)
+        .render("error", { message: "Error al obtener el carrito" });
     }
   }
 
@@ -145,6 +147,14 @@ class ViewController {
       console.error("Error:", error);
       res.status(500).send("Server Error");
     }
+  }
+
+  renderResetPassword(_, res) {
+    res.render("resetPassword");
+  }
+
+  renderChangePassword(_, res) {
+    res.render("changePassword");
   }
 }
 

@@ -40,4 +40,12 @@ router.get("/profile", userIsLoggedIn, (req, res) =>
   viewController.renderProfile(req, res)
 );
 
+router.get("/forgot-password",userIsNotLoggedIn, (req, res) =>
+  viewController.renderResetPassword(req, res)
+);
+
+router.get("/reset-password/:token", userIsNotLoggedIn, (req, res) =>
+  viewController.renderChangePassword(req, res)
+);
+
 module.exports = router;

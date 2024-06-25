@@ -16,6 +16,7 @@ const productRouter = require("./routers/products.router");
 const cartRouter = require("./routers/carts.router");
 const viewsRouter = require("./routers/views.router");
 const sessionsRouter = require("./routers/session.router");
+const passwordRouter = require("./routers/password.router");
 const mockRouter = require("./routers/mock.router");
 const { authorizeUser } = require("./middlewares/auth.middleware");
 const { errorHandler } = require("./services/errors/errorHandler");
@@ -41,6 +42,8 @@ app.set("view engine", "handlebars");
 app.use("/api/products", productRouter);
 app.use("/api/carts", authorizeUser, cartRouter);
 app.use("/api/sessions", sessionsRouter);
+app.use("/api/password", passwordRouter);
+
 app.use("/", viewsRouter); // Views
 app.use("/mockingproducts", mockRouter) // Mock
 
