@@ -42,7 +42,12 @@ class ProductController {
   }
 
   async updateProduct(req, res) {
-    const updatedProduct = await this.productService.updateProduct(req.params.pid, req.body);
+    let owner = null;
+    if(req.cookies.premium == "true"){
+      let token = decodeToken(req.cookies.accessToken);
+      owner = token.email
+    };
+    const updatedProduct = await this.productService.updateProduct(req.params.pid, req.body, owner);
     req.logger.info(`Product updated: ${updatedProduct.title}`);
     res.status(200).json(updatedProduct);
     // try {
@@ -52,7 +57,12 @@ class ProductController {
   }
 
   async deleteProduct(req, res) {
-    await this.productService.deleteProduct(req.params.pid);
+    let owner = null;
+    if(req.cookies.premium == "true"){
+      let token = decodeToken(req.cookies.accessToken);
+      owner = token.email
+    };
+    await this.productService.deleteProduct(req.params.pid, owner);
     req.logger.info("Product deleted");
     res.status(200).json({ message: "Producto eliminado" });
 

@@ -4,7 +4,6 @@ const { ErrorCodes } = require("./errorCode");
  * @type {import("express").ErrorRequestHandler}
  */
 const errorHandler = (error, req, res, next) => {
-  console.log(error.cause);
   switch (error.code) {
     case ErrorCodes.INVALID_TYPES_ERROR:
       res

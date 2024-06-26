@@ -63,7 +63,7 @@ class ProductService {
       });
     }
 
-    if (typeof Number(price) != "number"  || price <= 0) {
+    if (typeof Number(price) != "number" || price <= 0) {
       req.logger.error(`InvalidProductData`);
       throw CustomError.createError({
         name: "InvalidProductData",
@@ -91,7 +91,7 @@ class ProductService {
         code: ErrorCodes.PRODUCT_CREATION_ERROR,
       });
     }
-    
+
     const newProduct = {
       ...product,
       owner: owner ? owner : "admin",
@@ -144,7 +144,7 @@ class ProductService {
     return product;
   }
 
-  async updateProduct(id, updatedProduct) {
+  async updateProduct(id, updatedProduct, owner) {
     const { title, description, price, thumbnail, code, stock, category } =
       updatedProduct;
 
@@ -234,15 +234,35 @@ class ProductService {
       }
     }
 
+    if (owner && owner !== product.owner) {
+      req.logger.error(`You do not have permission to edit a non-own product`);
+      throw CustomError.createError({
+        name: "Non-own product",
+        cause: { owner },
+        message: "Quieres actualizar un producto no propio.",
+        code: ErrorCodes.PRODUCT_CREATION_ERROR,
+      });
+    }
+
     return await ProductModel.findByIdAndUpdate(id, updatedProduct, {
       new: true,
     });
   }
 
-  async deleteProduct(id) {
-    req.logger.error(`Error deleting product`);
+  async deleteProduct(id, owner) {
+    const productFind = await ProductModel.findOne({ _id: id });
+    if (owner && owner !== productFind.owner) {
+      req.logger.error(`You do not have permission to delete a non-own product`);
+      throw CustomError.createError({
+        name: "Non-own product",
+        cause: { owner },
+        message: "Quieres eliminar un producto no propio.",
+        code: ErrorCodes.PRODUCT_CREATION_ERROR,
+      });
+    }
     const result = await ProductModel.findByIdAndDelete(id);
     if (!result) {
+      req.logger.error(`Error deleting product`);
       throw CustomError.createError({
         name: "ProductNotFoundError",
         cause: { id },
