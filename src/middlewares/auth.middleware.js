@@ -19,10 +19,10 @@ module.exports = {
   },
 
   authorizeAdmin: (req, res, next) => {
-    if (req.signedCookies.userRole !== "admin") {
+    if (req.signedCookies.userRole !== "admin" && req.cookies.premium != "true") {
       return res
         .status(403)
-        .json({ error: "No tienes permisos de administrador" });
+        .json({ error: "No tienes permisos de administrador o plan premium" });
     }
     next();
   },
@@ -42,7 +42,7 @@ module.exports = {
   },
 
   authorizeViewAdmin: (req, res, next) => {
-    if (req.signedCookies.userRole !== "admin") {
+    if (req.signedCookies.userRole !== "admin" && req.cookies.premium != "true") {
       return res.redirect("/products");
     }
     next();

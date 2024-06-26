@@ -1,4 +1,5 @@
 const ProductService = require('../services/product.service'); 
+const { decodeToken } = require('../utils/jwt');
 
 class ProductController {
   constructor() {
@@ -6,7 +7,12 @@ class ProductController {
   }
 
   async addProduct(req, res) {
-    const product = await this.productService.addProduct(req.body);
+    let owner = null;
+    if(req.cookies.premium == "true"){
+      let token = decodeToken(req.cookies.accessToken);
+      owner = token.email
+    };
+    const product = await this.productService.addProduct(req.body, owner);
     req.logger.info(`Product added: ${product.title}`);
     res.status(201).json(product);
     // try {

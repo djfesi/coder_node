@@ -11,7 +11,7 @@ const UserSchema = new Schema({
   cart: { type: mongoose.Schema.Types.ObjectId, ref: "Cart" },
   resetPasswordToken: { type: String },
   resetPasswordExpires: { type: Date },
-  isPremium: { type: Boolean, default: false },
+  premium: { type: Boolean, default: false },
 });
 
 module.exports = mongoose.model("User", UserSchema);

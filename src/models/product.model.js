@@ -11,7 +11,7 @@ const ProductSchema = new Schema({
   stock: { type: Number },
   status: { type: Boolean },
   category: { type: String },
-  owner: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null },
+  owner: { type: String, default: null },
 });
 
 ProductSchema.plugin(mongoosePaginate);

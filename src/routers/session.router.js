@@ -47,6 +47,7 @@ router.get(
   (req, res) => {
     req.session.user = { email: req.user.email, _id: req.user._id.toString() };
     res.cookie("userRole", req.user.rol, { signed: true });
+    res.cookie("premium", req.user.premium);
     res.redirect("/products");
   }
 );
@@ -55,6 +56,7 @@ router.get("/logout", (req, res) => {
   req.session.destroy((err) => {
     res.clearCookie("userRole");
     res.clearCookie("cartId");
+    res.clearCookie("premium");
     res.clearCookie("accessToken");
     res.redirect("/login");
   });

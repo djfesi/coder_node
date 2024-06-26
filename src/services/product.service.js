@@ -6,7 +6,7 @@ const {
 } = require("./errors/productsErrors/prodcutErrors");
 
 class ProductService {
-  async addProduct(product) {
+  async addProduct(product, owner) {
     const {
       title,
       description,
@@ -45,7 +45,7 @@ class ProductService {
       });
     }
 
-    if (typeof stock !== "number" || stock <= 0) {
+    if (typeof Number(stock) != "number" || stock <= 0) {
       req.logger.error(`InvalidProductData`);
       throw CustomError.createError({
         name: "InvalidProductData",
@@ -63,7 +63,7 @@ class ProductService {
       });
     }
 
-    if (typeof price !== "number" || price <= 0) {
+    if (typeof Number(price) != "number"  || price <= 0) {
       req.logger.error(`InvalidProductData`);
       throw CustomError.createError({
         name: "InvalidProductData",
@@ -91,9 +91,10 @@ class ProductService {
         code: ErrorCodes.PRODUCT_CREATION_ERROR,
       });
     }
-
+    
     const newProduct = {
       ...product,
+      owner: owner ? owner : "admin",
       status: typeof status === "boolean" ? status : true,
     };
     return await ProductModel.create(newProduct);

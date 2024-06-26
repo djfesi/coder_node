@@ -10,6 +10,7 @@ class SessionController {
       const { token, userDTO, cartId } = await this.sessionService.login(req.user);
       req.session.user = { email: req.user.email, _id: req.user._id.toString() };
       res.cookie("userRole", req.user.rol, { signed: true });
+      res.cookie("premium", req.user.premium);
       res.cookie("accessToken", token, {
         maxAge: 60 * 60 * 1000,
         httpOnly: true,
